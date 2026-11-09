@@ -1,0 +1,590 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
+
+import 'overlay_bubble.dart';
+import 'sadar_dashboard.dart';
+import 'services/realtime_detection_service.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const SadarApp());
+}
+
+// Entry point floating window. Jangan dihapus.
+@pragma('vm:entry-point')
+void overlayMain() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      color: Colors.transparent,
+      home: DangerBubbleOverlay(),
+    ),
+  );
+}
+
+class SadarApp extends StatelessWidget {
+  const SadarApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SADAR',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF081322),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF54C5F8),
+          brightness: Brightness.dark,
+        ),
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // ==========================================
+  // OVERLAY KEYS
+  // ==========================================
+
+  static const String keyMode = 'danger_overlay_mode';
+  static const String keyLabel = 'danger_overlay_label';
+
+  static const String keyConfidence = 'danger_overlay_confidence';
+
+  static const String keyRevision = 'danger_overlay_revision';
+
+  // ==========================================
+  // OVERLAY SIZE
+  // ==========================================
+
+  static const int bubbleWidth = 180;
+  static const int bubbleHeight = 180;
+
+  static const int alertWidth = 900;
+  static const int alertHeight = 300;
+
+  // ==========================================
+  // SERVICES
+  // ==========================================
+
+  final RealtimeDetectionService _realtimeService = RealtimeDetectionService();
+
+  final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
+
+  StreamSubscription<RealtimeDetectionResult>? _realtimeSubscription;
+
+  Future<void> _overlayQueue = Future<void>.value();
+
+  // ==========================================
+  // STATE
+  // ==========================================
+
+  bool isRunning = false;
+  bool isLoading = false;
+
+  bool backgroundActive = false;
+  bool overlayActive = false;
+
+  bool _overlayExpanded = false;
+
+  int _overlayRevision = 0;
+  int processedWindows = 0;
+
+  String currentLabel = '-';
+  String status = 'SADAR belum aktif';
+
+  String _lastAlertLabel = 'background';
+
+  double currentConfidence = 0.0;
+  double currentLatency = 0.0;
+  double currentRms = 0.0;
+
+  // ==========================================
+  // SAVE OVERLAY STATE
+  // ==========================================
+
+  Future<void> _saveOverlayState({
+    required String mode,
+    required String label,
+    required double confidence,
+  }) async {
+    await _prefs.setString(keyMode, mode);
+    await _prefs.setString(keyLabel, label);
+    await _prefs.setDouble(keyConfidence, confidence);
+
+    // Revision ditulis terakhir.
+    _overlayRevision++;
+
+    await _prefs.setInt(keyRevision, _overlayRevision);
+
+    debugPrint(
+      'MAIN OVERLAY STATE -> '
+      'mode=$mode | label=$label | '
+      'confidence=$confidence | '
+      'revision=$_overlayRevision',
+    );
+  }
+
+  // ==========================================
+  // QUEUE OVERLAY
+  // ==========================================
+
+  void _enqueueOverlay(Future<void> Function() operation) {
+    _overlayQueue = _overlayQueue.then((_) => operation()).catchError((
+      Object error,
+    ) {
+      debugPrint('Overlay queue error: $error');
+    });
+  }
+
+  // ==========================================
+  // OVERLAY PERMISSION
+  // ==========================================
+
+  Future<bool> _ensureOverlayPermission() async {
+    bool granted = await FlutterOverlayWindow.isPermissionGranted();
+
+    if (granted) {
+      return true;
+    }
+
+    await FlutterOverlayWindow.requestPermission();
+
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    granted = await FlutterOverlayWindow.isPermissionGranted();
+
+    return granted;
+  }
+
+  // ==========================================
+  // OPEN OVERLAY
+  // ==========================================
+
+  Future<void> _openOverlay({required int width, required int height}) async {
+    await FlutterOverlayWindow.showOverlay(
+      width: width,
+      height: height,
+      alignment: OverlayAlignment.centerRight,
+      flag: OverlayFlag.defaultFlag,
+      enableDrag: true,
+      positionGravity: PositionGravity.auto,
+      overlayTitle: 'SADAR - Deteksi Suara Bahaya',
+      overlayContent: 'Pemantauan suara sedang aktif',
+      visibility: NotificationVisibility.visibilityPublic,
+    );
+
+    await Future<void>.delayed(const Duration(milliseconds: 800));
+  }
+
+  // ==========================================
+  // RESIZE WITH FALLBACK
+  // ==========================================
+
+  Future<void> _resizeOverlaySafely(int width, int height) async {
+    try {
+      await FlutterOverlayWindow.resizeOverlay(width, height, true);
+    } on MissingPluginException catch (error) {
+      debugPrint('resizeOverlay unavailable: $error');
+
+      await FlutterOverlayWindow.closeOverlay();
+
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      await _openOverlay(width: width, height: height);
+    }
+  }
+
+  // ==========================================
+  // NORMAL BUBBLE
+  // ==========================================
+
+  Future<void> _showBubble() async {
+    await _saveOverlayState(
+      mode: 'bubble',
+      label: 'background',
+      confidence: 0.0,
+    );
+
+    if (!await FlutterOverlayWindow.isActive()) {
+      await _openOverlay(width: bubbleWidth, height: bubbleHeight);
+
+      await _saveOverlayState(
+        mode: 'bubble',
+        label: 'background',
+        confidence: 0.0,
+      );
+    } else {
+      await _resizeOverlaySafely(bubbleWidth, bubbleHeight);
+    }
+
+    _overlayExpanded = false;
+
+    if (mounted) {
+      setState(() {
+        overlayActive = true;
+      });
+    }
+  }
+
+  // ==========================================
+  // DANGER OVERLAY
+  // ==========================================
+
+  Future<void> _showDangerOverlay(RealtimeDetectionResult result) async {
+    if (!await FlutterOverlayWindow.isActive()) {
+      await _showBubble();
+    }
+
+    // Perbarui informasi bahaya sebelum resize.
+    await _saveOverlayState(
+      mode: 'danger',
+      label: result.label,
+      confidence: result.confidence,
+    );
+
+    if (!_overlayExpanded) {
+      await _resizeOverlaySafely(alertWidth, alertHeight);
+
+      _overlayExpanded = true;
+
+      await _saveOverlayState(
+        mode: 'danger',
+        label: result.label,
+        confidence: result.confidence,
+      );
+    }
+  }
+
+  // ==========================================
+  // BACK TO NORMAL
+  // ==========================================
+
+  Future<void> _collapseToBubble() async {
+    await _saveOverlayState(
+      mode: 'bubble',
+      label: 'background',
+      confidence: 0.0,
+    );
+
+    if (!_overlayExpanded) {
+      return;
+    }
+
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+
+    await _resizeOverlaySafely(bubbleWidth, bubbleHeight);
+
+    _overlayExpanded = false;
+  }
+
+  // ==========================================
+  // CLOSE OVERLAY
+  // ==========================================
+
+  Future<void> _closeBubble() async {
+    try {
+      await _saveOverlayState(
+        mode: 'bubble',
+        label: 'background',
+        confidence: 0.0,
+      );
+
+      if (await FlutterOverlayWindow.isActive()) {
+        await FlutterOverlayWindow.closeOverlay();
+      }
+
+      _overlayExpanded = false;
+
+      if (mounted) {
+        setState(() {
+          overlayActive = false;
+        });
+      }
+    } catch (error) {
+      debugPrint('Close overlay error: $error');
+    }
+  }
+
+  // ==========================================
+  // BACKGROUND MODE
+  // ==========================================
+
+  Future<bool> _enableBackgroundMode() async {
+    try {
+      const config = FlutterBackgroundAndroidConfig(
+        notificationTitle: 'SADAR Aktif',
+        notificationText: 'Memantau suara bahaya di sekitar.',
+        notificationImportance: AndroidNotificationImportance.normal,
+        enableWifiLock: false,
+      );
+
+      final initialized = await FlutterBackground.initialize(
+        androidConfig: config,
+      );
+
+      if (!initialized) {
+        return false;
+      }
+
+      final enabled = await FlutterBackground.enableBackgroundExecution();
+
+      if (mounted) {
+        setState(() {
+          backgroundActive = enabled;
+        });
+      }
+
+      return enabled;
+    } catch (error) {
+      debugPrint('Background mode error: $error');
+      return false;
+    }
+  }
+
+  Future<void> _disableBackgroundMode() async {
+    try {
+      if (FlutterBackground.isBackgroundExecutionEnabled) {
+        await FlutterBackground.disableBackgroundExecution();
+      }
+
+      if (mounted) {
+        setState(() {
+          backgroundActive = false;
+        });
+      }
+    } catch (error) {
+      debugPrint('Disable background error: $error');
+    }
+  }
+
+  // ==========================================
+  // VIBRATION
+  // ==========================================
+
+  Future<void> _vibrateDanger() async {
+    final hasVibrator = await Vibration.hasVibrator();
+
+    if (!hasVibrator) {
+      return;
+    }
+
+    await Vibration.vibrate(pattern: [0, 400, 150, 400, 150, 700]);
+  }
+
+  // ==========================================
+  // START DETECTION
+  // ==========================================
+
+  Future<void> startDetection() async {
+    if (isRunning || isLoading) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      status = 'Menyiapkan SADAR...';
+
+      currentLabel = '-';
+      currentConfidence = 0;
+      currentLatency = 0;
+      currentRms = 0;
+
+      processedWindows = 0;
+      _lastAlertLabel = 'background';
+    });
+
+    try {
+      final permission = await _ensureOverlayPermission();
+
+      if (!permission) {
+        throw Exception(
+          'Izin tampil di atas aplikasi lain '
+          'belum diberikan.',
+        );
+      }
+
+      final bgEnabled = await _enableBackgroundMode();
+
+      if (!bgEnabled) {
+        throw Exception('Layanan background gagal diaktifkan.');
+      }
+
+      await _showBubble();
+
+      await _realtimeService.start();
+
+      await _realtimeSubscription?.cancel();
+
+      _realtimeSubscription = _realtimeService.results.listen(
+        (result) {
+          if (!mounted) {
+            return;
+          }
+
+          final isDanger = result.label != 'background' && result.label != '-';
+
+          if (isDanger) {
+            if (result.label != _lastAlertLabel) {
+              _lastAlertLabel = result.label;
+
+              unawaited(_vibrateDanger());
+            }
+
+            _enqueueOverlay(() => _showDangerOverlay(result));
+          } else {
+            _lastAlertLabel = 'background';
+
+            _enqueueOverlay(_collapseToBubble);
+          }
+
+          setState(() {
+            currentLabel = result.label;
+            currentConfidence = result.confidence;
+            currentLatency = result.latencyMs;
+            currentRms = result.rms;
+
+            processedWindows++;
+          });
+        },
+        onError: (Object error) {
+          debugPrint('Realtime error: $error');
+
+          if (mounted) {
+            setState(() {
+              status = 'Realtime error:\n$error';
+            });
+          }
+        },
+      );
+
+      if (mounted) {
+        setState(() {
+          isRunning = true;
+          status = 'SADAR aktif. Pemantauan berjalan di perangkat.';
+        });
+      }
+    } catch (error) {
+      await _realtimeSubscription?.cancel();
+      _realtimeSubscription = null;
+
+      await _realtimeService.stop();
+      await _closeBubble();
+      await _disableBackgroundMode();
+
+      if (mounted) {
+        setState(() {
+          isRunning = false;
+          status = 'Gagal mengaktifkan SADAR:\n$error';
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  // ==========================================
+  // STOP DETECTION
+  // ==========================================
+
+  Future<void> stopDetection() async {
+    if (!isRunning || isLoading) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      status = 'Menghentikan SADAR...';
+    });
+
+    try {
+      await _realtimeSubscription?.cancel();
+      _realtimeSubscription = null;
+
+      await _realtimeService.stop();
+      await _closeBubble();
+      await _disableBackgroundMode();
+
+      if (mounted) {
+        setState(() {
+          isRunning = false;
+
+          currentLabel = 'background';
+          currentConfidence = 0;
+          currentLatency = 0;
+          currentRms = 0;
+
+          _lastAlertLabel = 'background';
+          status = 'SADAR tidak aktif';
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          status = 'Gagal menghentikan:\n$error';
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  // ==========================================
+  // DISPOSE
+  // ==========================================
+
+  @override
+  void dispose() {
+    unawaited(_realtimeSubscription?.cancel());
+    unawaited(_realtimeService.dispose());
+
+    super.dispose();
+  }
+
+  // ==========================================
+  // NEW SADAR DASHBOARD
+  // ==========================================
+
+  @override
+  Widget build(BuildContext context) {
+    return SadarDashboard(
+      isRunning: isRunning,
+      isLoading: isLoading,
+      backgroundActive: backgroundActive,
+      overlayActive: overlayActive,
+      currentLabel: currentLabel,
+      currentConfidence: currentConfidence,
+      currentLatency: currentLatency,
+      currentRms: currentRms,
+      processedWindows: processedWindows,
+      status: status,
+      onStart: startDetection,
+      onStop: stopDetection,
+    );
+  }
+}

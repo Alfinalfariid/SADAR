@@ -1,0 +1,125 @@
+11-02 13:52:29.436 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=1
+11-02 13:52:29.730 I/flutter ( 3824): OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=1
+11-02 13:52:29.935 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=2
+11-02 13:52:30.047 I/flutter ( 3824): OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=2
+11-02 13:52:31.789 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0537 | TOP1=background 0.882 | TOP2=vehicle_horn 0.073 | MARGIN=0.809 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:32.198 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0275 | TOP1=background 0.893 | TOP2=siren 0.075 | MARGIN=0.818 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:32.674 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0324 | TOP1=background 0.996 | TOP2=siren 0.002 | MARGIN=0.994 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:33.156 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0393 | TOP1=background 0.928 | TOP2=siren 0.041 | MARGIN=0.887 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:33.633 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0334 | TOP1=background 0.960 | TOP2=siren 0.037 | MARGIN=0.923 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:34.115 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0390 | TOP1=background 0.996 | TOP2=siren 0.002 | MARGIN=0.994 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:34.595 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0431 | TOP1=background 0.761 | TOP2=siren 0.206 | MARGIN=0.555 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:35.060 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0419 | TOP1=background 0.800 | TOP2=siren 0.178 | MARGIN=0.622 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:35.541 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0399 | TOP1=background 0.950 | TOP2=siren 0.041 | MARGIN=0.908 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:36.018 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0338 | TOP1=background 0.982 | TOP2=siren 0.010 | MARGIN=0.972 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:36.501 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0719 | TOP1=background 0.947 | TOP2=siren 0.039 | MARGIN=0.908 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:36.980 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0751 | TOP1=background 0.990 | TOP2=siren 0.004 | MARGIN=0.986 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:37.449 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0490 | TOP1=background 0.967 | TOP2=vehicle_horn 0.019 | MARGIN=0.949 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:37.937 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0399 | TOP1=background 0.770 | TOP2=vehicle_horn 0.182 | MARGIN=0.588 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:38.408 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0488 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:38.901 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0688 | TOP1=background 0.996 | TOP2=siren 0.002 | MARGIN=0.994 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:39.379 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0606 | TOP1=background 0.999 | TOP2=siren 0.000 | MARGIN=0.999 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:39.846 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0745 | TOP1=background 0.999 | TOP2=siren 0.000 | MARGIN=0.999 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:40.338 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0811 | TOP1=background 0.990 | TOP2=siren 0.006 | MARGIN=0.984 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:40.817 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0522 | TOP1=background 0.992 | TOP2=vehicle_horn 0.004 | MARGIN=0.988 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:41.286 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0484 | TOP1=background 0.736 | TOP2=siren 0.185 | MARGIN=0.551 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:41.784 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0526 | TOP1=background 0.998 | TOP2=siren 0.002 | MARGIN=0.996 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:42.264 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0455 | TOP1=background 0.978 | TOP2=siren 0.018 | MARGIN=0.960 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:42.741 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0363 | TOP1=background 0.828 | TOP2=siren 0.161 | MARGIN=0.667 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:43.205 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0364 | TOP1=background 0.956 | TOP2=siren 0.021 | MARGIN=0.935 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:43.709 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0564 | TOP1=background 0.995 | TOP2=siren 0.002 | MARGIN=0.992 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:44.187 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0803 | TOP1=background 0.996 | TOP2=siren 0.003 | MARGIN=0.993 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:44.669 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0822 | TOP1=background 0.994 | TOP2=vehicle_horn 0.003 | MARGIN=0.991 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:45.148 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0604 | TOP1=background 0.994 | TOP2=siren 0.003 | MARGIN=0.990 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:45.623 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0770 | TOP1=background 0.936 | TOP2=siren 0.050 | MARGIN=0.886 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:46.107 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1049 | TOP1=background 0.991 | TOP2=siren 0.006 | MARGIN=0.985 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:46.562 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0931 | TOP1=background 0.996 | TOP2=siren 0.004 | MARGIN=0.992 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:47.050 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0558 | TOP1=background 0.998 | TOP2=siren 0.002 | MARGIN=0.996 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:47.538 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0369 | TOP1=background 0.910 | TOP2=siren 0.080 | MARGIN=0.830 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:48.027 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0528 | TOP1=background 0.998 | TOP2=siren 0.001 | MARGIN=0.996 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:48.510 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0510 | TOP1=background 0.999 | TOP2=siren 0.001 | MARGIN=0.998 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:48.988 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0353 | TOP1=background 0.874 | TOP2=siren 0.092 | MARGIN=0.781 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:49.459 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0376 | TOP1=background 0.949 | TOP2=siren 0.045 | MARGIN=0.904 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:49.949 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0447 | TOP1=background 0.797 | TOP2=siren 0.108 | MARGIN=0.690 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:50.426 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0775 | TOP1=background 0.815 | TOP2=vehicle_horn 0.109 | MARGIN=0.705 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:50.905 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0928 | TOP1=background 0.997 | TOP2=siren 0.002 | MARGIN=0.995 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:51.366 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0795 | TOP1=background 0.933 | TOP2=vehicle_horn 0.043 | MARGIN=0.891 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:51.865 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0744 | TOP1=siren 0.654 | TOP2=vehicle_horn 0.225 | MARGIN=0.429 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 13:52:52.335 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0682 | TOP1=vehicle_horn 0.765 | TOP2=background 0.159 | MARGIN=0.606 | FINAL=background | FILTERED=true | REASON=waiting_confirmation_1_of_2
+11-02 13:52:52.824 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0571 | TOP1=background 0.627 | TOP2=siren 0.191 | MARGIN=0.436 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:53.309 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0618 | TOP1=background 0.962 | TOP2=siren 0.022 | MARGIN=0.940 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:53.784 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0722 | TOP1=background 0.983 | TOP2=vehicle_horn 0.010 | MARGIN=0.973 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:54.267 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0820 | TOP1=background 0.989 | TOP2=siren 0.005 | MARGIN=0.984 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:54.745 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0701 | TOP1=background 0.797 | TOP2=vehicle_horn 0.183 | MARGIN=0.614 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:55.228 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0505 | TOP1=background 0.661 | TOP2=vehicle_horn 0.286 | MARGIN=0.375 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:55.705 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0567 | TOP1=background 0.956 | TOP2=vehicle_horn 0.024 | MARGIN=0.932 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:56.188 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0616 | TOP1=background 0.939 | TOP2=vehicle_horn 0.041 | MARGIN=0.898 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:56.668 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0876 | TOP1=background 0.681 | TOP2=vehicle_horn 0.228 | MARGIN=0.454 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:57.150 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1057 | TOP1=background 0.984 | TOP2=siren 0.014 | MARGIN=0.970 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:57.625 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1015 | TOP1=siren 0.542 | TOP2=background 0.354 | MARGIN=0.188 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 13:52:58.108 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1032 | TOP1=background 0.892 | TOP2=siren 0.057 | MARGIN=0.834 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:58.584 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1080 | TOP1=background 0.443 | TOP2=siren 0.376 | MARGIN=0.068 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:59.064 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1142 | TOP1=background 0.914 | TOP2=vehicle_horn 0.048 | MARGIN=0.867 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:52:59.542 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1098 | TOP1=background 0.732 | TOP2=siren 0.184 | MARGIN=0.548 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:00.021 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0891 | TOP1=background 0.728 | TOP2=vehicle_horn 0.150 | MARGIN=0.578 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:00.506 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0851 | TOP1=background 0.715 | TOP2=siren 0.182 | MARGIN=0.533 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:00.982 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0905 | TOP1=background 0.736 | TOP2=vehicle_horn 0.181 | MARGIN=0.555 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:01.464 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0837 | TOP1=background 0.512 | TOP2=vehicle_horn 0.404 | MARGIN=0.108 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:01.949 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0799 | TOP1=background 0.693 | TOP2=vehicle_horn 0.291 | MARGIN=0.402 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:02.426 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0916 | TOP1=background 0.878 | TOP2=vehicle_horn 0.105 | MARGIN=0.772 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:02.904 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0935 | TOP1=background 0.907 | TOP2=siren 0.063 | MARGIN=0.844 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:03.363 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0923 | TOP1=background 0.674 | TOP2=siren 0.179 | MARGIN=0.495 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:03.866 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0970 | TOP1=background 0.967 | TOP2=vehicle_horn 0.027 | MARGIN=0.941 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:04.342 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0938 | TOP1=background 0.638 | TOP2=vehicle_horn 0.322 | MARGIN=0.316 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:04.826 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0827 | TOP1=background 0.540 | TOP2=vehicle_horn 0.382 | MARGIN=0.158 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:05.307 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0694 | TOP1=vehicle_horn 0.728 | TOP2=background 0.173 | MARGIN=0.556 | FINAL=background | FILTERED=true | REASON=waiting_confirmation_1_of_2
+11-02 13:53:05.794 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0621 | TOP1=vehicle_horn 0.723 | TOP2=background 0.238 | MARGIN=0.485 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_confirmed
+11-02 13:53:05.865 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.7234143018722534 | revision=3
+11-02 13:53:05.987 I/flutter ( 3824): OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.7234143018722534 | revision=3
+11-02 13:53:06.303 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0576 | TOP1=vehicle_horn 0.783 | TOP2=background 0.128 | MARGIN=0.656 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:06.623 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.7234143018722534 | revision=4
+11-02 13:53:06.748 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0513 | TOP1=siren 0.582 | TOP2=vehicle_horn 0.388 | MARGIN=0.193 | FINAL=vehicle_horn | FILTERED=true | REASON=danger_latch_active
+11-02 13:53:06.782 I/flutter ( 3824): OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.7234143018722534 | revision=4
+11-02 13:53:07.219 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0474 | TOP1=siren 0.857 | TOP2=vehicle_horn 0.121 | MARGIN=0.735 | FINAL=vehicle_horn | FILTERED=true | REASON=danger_latch_active
+11-02 13:53:07.706 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0440 | TOP1=background 0.529 | TOP2=siren 0.255 | MARGIN=0.273 | FINAL=vehicle_horn | FILTERED=true | REASON=danger_latch_active
+11-02 13:53:08.180 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0395 | TOP1=vehicle_horn 0.785 | TOP2=siren 0.180 | MARGIN=0.606 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:08.670 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0391 | TOP1=vehicle_horn 0.856 | TOP2=siren 0.096 | MARGIN=0.759 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:09.138 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0381 | TOP1=vehicle_horn 0.868 | TOP2=siren 0.094 | MARGIN=0.774 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:09.627 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0472 | TOP1=vehicle_horn 0.386 | TOP2=background 0.319 | MARGIN=0.068 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:10.109 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0597 | TOP1=vehicle_horn 0.363 | TOP2=background 0.345 | MARGIN=0.017 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:10.583 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0663 | TOP1=vehicle_horn 0.717 | TOP2=siren 0.172 | MARGIN=0.545 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:11.067 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1190 | TOP1=background 0.998 | TOP2=siren 0.002 | MARGIN=0.996 | FINAL=vehicle_horn | FILTERED=true | REASON=danger_latch_active
+11-02 13:53:11.548 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1353 | TOP1=background 0.993 | TOP2=siren 0.003 | MARGIN=0.990 | FINAL=vehicle_horn | FILTERED=true | REASON=danger_latch_active
+11-02 13:53:12.027 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0900 | TOP1=vehicle_horn 0.501 | TOP2=siren 0.163 | MARGIN=0.338 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:12.497 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0525 | TOP1=vehicle_horn 0.569 | TOP2=siren 0.244 | MARGIN=0.325 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:12.987 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0363 | TOP1=vehicle_horn 0.422 | TOP2=siren 0.413 | MARGIN=0.009 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:13.469 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0391 | TOP1=vehicle_horn 0.786 | TOP2=siren 0.170 | MARGIN=0.616 | FINAL=background | FILTERED=true | REASON=waiting_confirmation_1_of_2
+11-02 13:53:13.542 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=5
+11-02 13:53:13.639 I/flutter ( 3824): OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=5
+11-02 13:53:13.922 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0416 | TOP1=vehicle_horn 0.868 | TOP2=siren 0.116 | MARGIN=0.752 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_confirmed
+11-02 13:53:14.323 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=6
+11-02 13:53:14.371 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.868407666683197 | revision=7
+11-02 13:53:14.431 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0474 | TOP1=vehicle_horn 0.872 | TOP2=siren 0.097 | MARGIN=0.776 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:14.447 I/flutter ( 3824): OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.868407666683197 | revision=7
+11-02 13:53:14.896 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0524 | TOP1=vehicle_horn 0.891 | TOP2=siren 0.100 | MARGIN=0.792 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:15.145 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.868407666683197 | revision=8
+11-02 13:53:15.298 I/flutter ( 3824): OVERLAY STATE -> mode=danger | label=vehicle_horn | confidence=0.868407666683197 | revision=8
+11-02 13:53:15.377 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0533 | TOP1=vehicle_horn 0.823 | TOP2=siren 0.152 | MARGIN=0.671 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:15.867 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0701 | TOP1=vehicle_horn 0.899 | TOP2=background 0.047 | MARGIN=0.852 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:16.340 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.0877 | TOP1=vehicle_horn 0.448 | TOP2=siren 0.443 | MARGIN=0.005 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:16.829 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1361 | TOP1=siren 0.391 | TOP2=alarm 0.198 | MARGIN=0.193 | FINAL=vehicle_horn | FILTERED=true | REASON=danger_latch_active
+11-02 13:53:17.309 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1869 | TOP1=background 0.771 | TOP2=siren 0.111 | MARGIN=0.660 | FINAL=vehicle_horn | FILTERED=true | REASON=danger_latch_active
+11-02 13:53:17.785 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1955 | TOP1=vehicle_horn 0.608 | TOP2=siren 0.159 | MARGIN=0.448 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:18.265 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1846 | TOP1=vehicle_horn 0.700 | TOP2=siren 0.300 | MARGIN=0.400 | FINAL=vehicle_horn | FILTERED=false | REASON=danger_latch_active
+11-02 13:53:18.728 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1728 | TOP1=siren 0.676 | TOP2=vehicle_horn 0.262 | MARGIN=0.415 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 13:53:18.776 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=9
+11-02 13:53:18.882 I/flutter ( 3824): OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=9
+11-02 13:53:19.222 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1267 | TOP1=siren 0.548 | TOP2=vehicle_horn 0.255 | MARGIN=0.293 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 13:53:19.528 I/flutter ( 3824): MAIN OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=10
+11-02 13:53:19.646 I/flutter ( 3824): OVERLAY STATE -> mode=bubble | label=background | confidence=0.0 | revision=10
+11-02 13:53:19.700 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1481 | TOP1=vehicle_horn 0.528 | TOP2=background 0.172 | MARGIN=0.357 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 13:53:20.168 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1890 | TOP1=siren 0.352 | TOP2=vehicle_horn 0.303 | MARGIN=0.048 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 13:53:20.665 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.2235 | TOP1=background 0.377 | TOP2=vehicle_horn 0.328 | MARGIN=0.048 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 13:53:21.148 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.2316 | TOP1=vehicle_horn 0.576 | TOP2=background 0.192 | MARGIN=0.385 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 13:53:21.627 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.1878 | TOP1=vehicle_horn 0.847 | TOP2=siren 0.063 | MARGIN=0.784 | FINAL=background | FILTERED=true | REASON=waiting_confirmation_1_of_2
+11-02 13:53:22.093 I/flutter ( 3824): AUDIO_DEBUG | RMS=0.2035 | TOP1=siren 0.549 | TOP2=vehicle_horn 0.371 | MARGIN=0.177 | FINAL=background | FILTERED=true | REASON=below_class_threshold

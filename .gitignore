@@ -1,0 +1,35 @@
+# Environment Python, termasuk .venv_tf
+.venv*/
+venv/
+env/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Konfigurasi lokal
+.env
+.env.*
+!.env.example
+
+# Cache dan hasil build Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+
+# Konfigurasi Android lokal
+**/android/local.properties
+**/android/.gradle/
+**/android/key.properties
+
+# Kunci penandatanganan
+*.jks
+*.keystore
+
+# Dataset, audio, dan model eksperimen ML
+/ml/audio/
+/ml/dataset/
+/ml/models/

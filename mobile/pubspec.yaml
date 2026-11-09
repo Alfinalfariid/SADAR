@@ -1,0 +1,62 @@
+name: mobile
+description: "SADAR - Deteksi suara bahaya di perangkat."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  http: ^1.0.0
+  tflite_flutter: ^0.12.1
+  record: ^7.1.1
+  vibration: 3.1.3
+  flutter_background: ^1.3.1
+  flutter_overlay_window: ^0.5.0
+  shared_preferences: ^2.5.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/models/yamnet_embedding_fp32.tflite
+    - assets/models/yamnet_embedding_dynamic_int8.tflite
+    - assets/models/danger_classifier_fp32.tflite
+    - assets/images/sadar_logo.png
+    - assets/fonts/FONT_LICENSES.txt
+
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: assets/fonts/Sora.ttf
+          weight: 400
+        - asset: assets/fonts/Sora.ttf
+          weight: 700
+
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans.ttf
+          weight: 700
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: assets/images/sadar_logo.png
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/images/sadar_logo.png
+  adaptive_icon_foreground_inset: 16

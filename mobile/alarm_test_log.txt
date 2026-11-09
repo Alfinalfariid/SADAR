@@ -1,0 +1,40 @@
+11-02 12:10:04.074 I/flutter (15177): AUDIO_DEBUG | RMS=0.0476 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=0.999 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:04.074 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:04.555 I/flutter (15177): AUDIO_DEBUG | RMS=0.0470 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:04.555 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:05.029 I/flutter (15177): AUDIO_DEBUG | RMS=0.0455 | TOP1=background 0.999 | TOP2=siren 0.000 | MARGIN=0.999 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:05.029 I/flutter (15177): PROBS | alarm=0.000 | background=0.999 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:05.514 I/flutter (15177): AUDIO_DEBUG | RMS=0.0502 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:05.515 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:05.987 I/flutter (15177): AUDIO_DEBUG | RMS=0.1242 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:05.987 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:06.475 I/flutter (15177): AUDIO_DEBUG | RMS=0.1300 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=0.999 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:06.476 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:06.941 I/flutter (15177): AUDIO_DEBUG | RMS=0.0692 | TOP1=background 0.981 | TOP2=vehicle_horn 0.009 | MARGIN=0.972 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:06.942 I/flutter (15177): PROBS | alarm=0.000 | background=0.981 | glass_breaking=0.005 | scream=0.001 | siren=0.003 | vehicle_horn=0.009
+11-02 12:10:07.433 I/flutter (15177): AUDIO_DEBUG | RMS=0.1069 | TOP1=background 0.794 | TOP2=vehicle_horn 0.083 | MARGIN=0.711 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:07.433 I/flutter (15177): PROBS | alarm=0.018 | background=0.794 | glass_breaking=0.044 | scream=0.024 | siren=0.038 | vehicle_horn=0.083
+11-02 12:10:07.893 I/flutter (15177): AUDIO_DEBUG | RMS=0.1643 | TOP1=siren 0.591 | TOP2=background 0.290 | MARGIN=0.301 | FINAL=background | FILTERED=true | REASON=below_class_threshold
+11-02 12:10:07.894 I/flutter (15177): PROBS | alarm=0.015 | background=0.290 | glass_breaking=0.009 | scream=0.052 | siren=0.591 | vehicle_horn=0.043
+11-02 12:10:08.393 I/flutter (15177): AUDIO_DEBUG | RMS=0.1620 | TOP1=background 0.980 | TOP2=glass_breaking 0.011 | MARGIN=0.969 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:08.393 I/flutter (15177): PROBS | alarm=0.001 | background=0.980 | glass_breaking=0.011 | scream=0.004 | siren=0.001 | vehicle_horn=0.003
+11-02 12:10:08.872 I/flutter (15177): AUDIO_DEBUG | RMS=0.1034 | TOP1=background 0.943 | TOP2=siren 0.038 | MARGIN=0.905 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:08.873 I/flutter (15177): PROBS | alarm=0.002 | background=0.943 | glass_breaking=0.005 | scream=0.005 | siren=0.038 | vehicle_horn=0.007
+11-02 12:10:09.353 I/flutter (15177): AUDIO_DEBUG | RMS=0.0570 | TOP1=background 0.867 | TOP2=vehicle_horn 0.054 | MARGIN=0.813 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:09.353 I/flutter (15177): PROBS | alarm=0.002 | background=0.867 | glass_breaking=0.049 | scream=0.007 | siren=0.020 | vehicle_horn=0.054
+11-02 12:10:09.830 I/flutter (15177): AUDIO_DEBUG | RMS=0.0690 | TOP1=background 0.886 | TOP2=siren 0.042 | MARGIN=0.844 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:09.830 I/flutter (15177): PROBS | alarm=0.003 | background=0.886 | glass_breaking=0.021 | scream=0.016 | siren=0.042 | vehicle_horn=0.032
+11-02 12:10:10.312 I/flutter (15177): AUDIO_DEBUG | RMS=0.1012 | TOP1=background 0.911 | TOP2=siren 0.036 | MARGIN=0.875 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:10.312 I/flutter (15177): PROBS | alarm=0.003 | background=0.911 | glass_breaking=0.013 | scream=0.005 | siren=0.036 | vehicle_horn=0.032
+11-02 12:10:10.795 I/flutter (15177): AUDIO_DEBUG | RMS=0.1040 | TOP1=background 0.927 | TOP2=siren 0.041 | MARGIN=0.886 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:10.796 I/flutter (15177): PROBS | alarm=0.000 | background=0.927 | glass_breaking=0.002 | scream=0.002 | siren=0.041 | vehicle_horn=0.027
+11-02 12:10:11.270 I/flutter (15177): AUDIO_DEBUG | RMS=0.0809 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:11.271 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:11.728 I/flutter (15177): AUDIO_DEBUG | RMS=0.0728 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:11.728 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:12.223 I/flutter (15177): AUDIO_DEBUG | RMS=0.0578 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:12.223 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:12.704 I/flutter (15177): AUDIO_DEBUG | RMS=0.0374 | TOP1=background 1.000 | TOP2=siren 0.000 | MARGIN=1.000 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:12.704 I/flutter (15177): PROBS | alarm=0.000 | background=1.000 | glass_breaking=0.000 | scream=0.000 | siren=0.000 | vehicle_horn=0.000
+11-02 12:10:13.195 I/flutter (15177): AUDIO_DEBUG | RMS=0.0228 | TOP1=background 0.996 | TOP2=siren 0.002 | MARGIN=0.994 | FINAL=background | FILTERED=false | REASON=classifier_background
+11-02 12:10:13.195 I/flutter (15177): PROBS | alarm=0.000 | background=0.996 | glass_breaking=0.001 | scream=0.000 | siren=0.002 | vehicle_horn=0.001

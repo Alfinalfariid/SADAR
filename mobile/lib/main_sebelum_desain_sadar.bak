@@ -1,0 +1,909 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
+
+import 'overlay_bubble.dart';
+import 'services/realtime_detection_service.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
+
+@pragma('vm:entry-point')
+void overlayMain() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      color: Colors.transparent,
+      home: DangerBubbleOverlay(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Danger Sound AI',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: const Color(0xFF455A64),
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  static const String keyMode = 'danger_overlay_mode';
+  static const String keyLabel = 'danger_overlay_label';
+  static const String keyConfidence = 'danger_overlay_confidence';
+  static const String keyRevision = 'danger_overlay_revision';
+
+  static const int bubbleWidth = 180;
+  static const int bubbleHeight = 180;
+
+  static const int alertWidth = 900;
+  static const int alertHeight = 300;
+
+  final RealtimeDetectionService _realtimeService = RealtimeDetectionService();
+
+  final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
+
+  StreamSubscription<RealtimeDetectionResult>? _realtimeSubscription;
+
+  Future<void> _overlayQueue = Future<void>.value();
+
+  bool isRunning = false;
+  bool isLoading = false;
+  bool backgroundActive = false;
+  bool overlayActive = false;
+
+  bool _overlayExpanded = false;
+  bool _resizeSupported = true;
+
+  int _overlayRevision = 0;
+
+  String _requestedMode = 'bubble';
+  String _requestedLabel = 'background';
+  String _lastAlertLabel = 'background';
+
+  String currentLabel = '-';
+  double currentConfidence = 0.0;
+  double currentLatency = 0.0;
+  int processedWindows = 0;
+
+  String status = 'Danger Sound AI belum aktif';
+
+  // ============================================
+  // FORMAT LABEL
+  // ============================================
+
+  String formatClassName(String label) {
+    switch (label) {
+      case 'alarm':
+        return 'Alarm';
+
+      case 'background':
+        return 'Background';
+
+      case 'glass_breaking':
+        return 'Pecahan Kaca';
+
+      case 'scream':
+        return 'Teriakan';
+
+      case 'siren':
+        return 'Sirene';
+
+      case 'vehicle_horn':
+        return 'Klakson Kendaraan';
+
+      default:
+        return label;
+    }
+  }
+
+  IconData dangerIcon(String label) {
+    switch (label) {
+      case 'alarm':
+        return Icons.notifications_active_rounded;
+
+      case 'glass_breaking':
+        return Icons.broken_image_rounded;
+
+      case 'scream':
+        return Icons.record_voice_over_rounded;
+
+      case 'siren':
+        return Icons.campaign_rounded;
+
+      case 'vehicle_horn':
+        return Icons.directions_car_filled_rounded;
+
+      default:
+        return Icons.warning_amber_rounded;
+    }
+  }
+
+  // ============================================
+  // SIMPAN STATUS OVERLAY
+  // ============================================
+
+  Future<void> _saveOverlayState({
+    required String mode,
+    required String label,
+    required double confidence,
+  }) async {
+    await _prefs.setString(keyMode, mode);
+    await _prefs.setString(keyLabel, label);
+
+    await _prefs.setDouble(keyConfidence, confidence);
+
+    // Revision selalu disimpan terakhir.
+    _overlayRevision++;
+
+    await _prefs.setInt(keyRevision, _overlayRevision);
+
+    debugPrint(
+      'MAIN OVERLAY STATE -> '
+      'mode=$mode | '
+      'label=$label | '
+      'confidence=$confidence | '
+      'revision=$_overlayRevision',
+    );
+  }
+
+  // ============================================
+  // ANTREAN OVERLAY
+  // ============================================
+
+  void _enqueueOverlay(Future<void> Function() operation) {
+    _overlayQueue = _overlayQueue.then((_) => operation()).catchError((
+      Object error,
+    ) {
+      debugPrint('Overlay queue error: $error');
+    });
+  }
+
+  // ============================================
+  // IZIN OVERLAY
+  // ============================================
+
+  Future<bool> _ensureOverlayPermission() async {
+    var granted = await FlutterOverlayWindow.isPermissionGranted();
+
+    if (granted) {
+      return true;
+    }
+
+    await FlutterOverlayWindow.requestPermission();
+
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    granted = await FlutterOverlayWindow.isPermissionGranted();
+
+    return granted;
+  }
+
+  // ============================================
+  // BUKA OVERLAY
+  // ============================================
+
+  Future<void> _openOverlay({required int width, required int height}) async {
+    await FlutterOverlayWindow.showOverlay(
+      width: width,
+      height: height,
+      alignment: OverlayAlignment.centerRight,
+      flag: OverlayFlag.defaultFlag,
+      enableDrag: true,
+      positionGravity: PositionGravity.auto,
+      overlayTitle: 'Danger Sound AI',
+      overlayContent: 'Deteksi suara bahaya aktif',
+      visibility: NotificationVisibility.visibilityPublic,
+    );
+
+    await Future<void>.delayed(const Duration(milliseconds: 450));
+  }
+
+  // ============================================
+  // RESIZE DENGAN FALLBACK
+  // ============================================
+
+  Future<void> _resizeOrReopen({
+    required int width,
+    required int height,
+  }) async {
+    if (_resizeSupported) {
+      try {
+        final resized = await FlutterOverlayWindow.resizeOverlay(
+          width,
+          height,
+          true,
+        );
+
+        if (resized != false) {
+          return;
+        }
+
+        debugPrint(
+          'resizeOverlay returned false; '
+          'using reopen fallback.',
+        );
+      } catch (error) {
+        debugPrint(
+          'resizeOverlay failed; '
+          'using reopen fallback: $error',
+        );
+      }
+
+      _resizeSupported = false;
+    }
+
+    // Jika fungsi resize gagal, overlay
+    // ditutup lalu dibuka dengan ukuran baru.
+
+    if (await FlutterOverlayWindow.isActive()) {
+      await FlutterOverlayWindow.closeOverlay();
+
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+    }
+
+    await _openOverlay(width: width, height: height);
+  }
+
+  // ============================================
+  // TAMPILKAN BUBBLE NORMAL
+  // ============================================
+
+  Future<void> _showBubble() async {
+    await _saveOverlayState(
+      mode: 'bubble',
+      label: 'background',
+      confidence: 0.0,
+    );
+
+    if (await FlutterOverlayWindow.isActive()) {
+      await _resizeOrReopen(width: bubbleWidth, height: bubbleHeight);
+    } else {
+      await _openOverlay(width: bubbleWidth, height: bubbleHeight);
+    }
+
+    // Kirim ulang status ketika overlay
+    // sudah selesai dibuka.
+
+    await _saveOverlayState(
+      mode: 'bubble',
+      label: 'background',
+      confidence: 0.0,
+    );
+
+    _overlayExpanded = false;
+    _requestedMode = 'bubble';
+    _requestedLabel = 'background';
+
+    if (mounted) {
+      setState(() {
+        overlayActive = true;
+      });
+    }
+  }
+
+  // ============================================
+  // TAMPILKAN PERINGATAN BAHAYA
+  // ============================================
+
+  Future<void> _showDangerOverlay(RealtimeDetectionResult result) async {
+    // PERBAIKAN UTAMA:
+    // Informasi bahaya disimpan SEBELUM resize.
+
+    await _saveOverlayState(
+      mode: 'danger',
+      label: result.label,
+      confidence: result.confidence,
+    );
+
+    final active = await FlutterOverlayWindow.isActive();
+
+    if (!active) {
+      await _openOverlay(width: alertWidth, height: alertHeight);
+
+      _overlayExpanded = true;
+
+      await _saveOverlayState(
+        mode: 'danger',
+        label: result.label,
+        confidence: result.confidence,
+      );
+
+      return;
+    }
+
+    if (!_overlayExpanded) {
+      await _resizeOrReopen(width: alertWidth, height: alertHeight);
+
+      _overlayExpanded = true;
+
+      // Kirim ulang status setelah resize
+      // atau setelah overlay dibuka kembali.
+
+      await _saveOverlayState(
+        mode: 'danger',
+        label: result.label,
+        confidence: result.confidence,
+      );
+    }
+  }
+
+  // ============================================
+  // KEMBALI KE BUBBLE NORMAL
+  // ============================================
+
+  Future<void> _collapseToBubble() async {
+    await _saveOverlayState(
+      mode: 'bubble',
+      label: 'background',
+      confidence: 0.0,
+    );
+
+    final active = await FlutterOverlayWindow.isActive();
+
+    if (!active) {
+      await _openOverlay(width: bubbleWidth, height: bubbleHeight);
+
+      _overlayExpanded = false;
+
+      await _saveOverlayState(
+        mode: 'bubble',
+        label: 'background',
+        confidence: 0.0,
+      );
+
+      return;
+    }
+
+    if (_overlayExpanded) {
+      await _resizeOrReopen(width: bubbleWidth, height: bubbleHeight);
+
+      _overlayExpanded = false;
+
+      await _saveOverlayState(
+        mode: 'bubble',
+        label: 'background',
+        confidence: 0.0,
+      );
+    }
+  }
+
+  // ============================================
+  // TUTUP OVERLAY
+  // ============================================
+
+  Future<void> _closeBubble() async {
+    try {
+      final active = await FlutterOverlayWindow.isActive();
+
+      if (active) {
+        await FlutterOverlayWindow.closeOverlay();
+      }
+
+      _overlayExpanded = false;
+      _requestedMode = 'bubble';
+      _requestedLabel = 'background';
+
+      if (mounted) {
+        setState(() {
+          overlayActive = false;
+        });
+      }
+    } catch (error) {
+      debugPrint('Close overlay error: $error');
+    }
+  }
+
+  // ============================================
+  // BACKGROUND SERVICE
+  // ============================================
+
+  Future<bool> _enableBackgroundMode() async {
+    try {
+      const config = FlutterBackgroundAndroidConfig(
+        notificationTitle: 'Danger Sound AI Aktif',
+        notificationText: 'Sedang mendengarkan suara bahaya di sekitar.',
+        notificationImportance: AndroidNotificationImportance.normal,
+        enableWifiLock: false,
+      );
+
+      final initialized = await FlutterBackground.initialize(
+        androidConfig: config,
+      );
+
+      if (!initialized) {
+        return false;
+      }
+
+      final enabled = await FlutterBackground.enableBackgroundExecution();
+
+      if (mounted) {
+        setState(() {
+          backgroundActive = enabled;
+        });
+      }
+
+      return enabled;
+    } catch (error) {
+      debugPrint('Background mode error: $error');
+
+      return false;
+    }
+  }
+
+  Future<void> _disableBackgroundMode() async {
+    try {
+      if (FlutterBackground.isBackgroundExecutionEnabled) {
+        await FlutterBackground.disableBackgroundExecution();
+      }
+
+      if (mounted) {
+        setState(() {
+          backgroundActive = false;
+        });
+      }
+    } catch (error) {
+      debugPrint('Disable background error: $error');
+    }
+  }
+
+  // ============================================
+  // GETARAN
+  // ============================================
+
+  Future<void> _vibrateDanger() async {
+    try {
+      final hasVibrator = await Vibration.hasVibrator();
+
+      if (!hasVibrator) {
+        return;
+      }
+
+      await Vibration.vibrate(pattern: [0, 400, 150, 400, 150, 700]);
+    } catch (error) {
+      debugPrint('Vibration error: $error');
+    }
+  }
+
+  // ============================================
+  // PROSES HASIL DETEKSI
+  // ============================================
+
+  void _onRealtimeResult(RealtimeDetectionResult result) {
+    if (!mounted) {
+      return;
+    }
+
+    final danger = result.label != 'background' && result.label != '-';
+
+    if (danger) {
+      if (result.label != _lastAlertLabel) {
+        _lastAlertLabel = result.label;
+
+        unawaited(_vibrateDanger());
+      }
+
+      // Hindari resize berulang pada
+      // setiap window audio.
+
+      if (_requestedMode != 'danger' || _requestedLabel != result.label) {
+        _requestedMode = 'danger';
+        _requestedLabel = result.label;
+
+        _enqueueOverlay(() => _showDangerOverlay(result));
+      }
+    } else {
+      _lastAlertLabel = 'background';
+
+      if (_requestedMode != 'bubble') {
+        _requestedMode = 'bubble';
+        _requestedLabel = 'background';
+
+        _enqueueOverlay(_collapseToBubble);
+      }
+    }
+
+    setState(() {
+      currentLabel = result.label;
+      currentConfidence = result.confidence;
+      currentLatency = result.latencyMs;
+      processedWindows++;
+    });
+  }
+
+  // ============================================
+  // MULAI DETEKSI
+  // ============================================
+
+  Future<void> startDetection() async {
+    if (isRunning || isLoading) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      status = 'Menyiapkan Danger Sound AI...';
+
+      currentLabel = '-';
+      currentConfidence = 0.0;
+      currentLatency = 0.0;
+      processedWindows = 0;
+
+      _lastAlertLabel = 'background';
+      _requestedMode = 'bubble';
+      _requestedLabel = 'background';
+    });
+
+    try {
+      final permission = await _ensureOverlayPermission();
+
+      if (!permission) {
+        throw Exception(
+          'Izin "Tampil di atas aplikasi lain" '
+          'belum diberikan.',
+        );
+      }
+
+      final bgEnabled = await _enableBackgroundMode();
+
+      if (!bgEnabled) {
+        throw Exception('Background service gagal diaktifkan.');
+      }
+
+      await _showBubble();
+
+      await _realtimeService.start();
+
+      await _realtimeSubscription?.cancel();
+
+      _realtimeSubscription = _realtimeService.results.listen(
+        _onRealtimeResult,
+        onError: (Object error) {
+          debugPrint('Realtime error: $error');
+
+          if (mounted) {
+            setState(() {
+              status = 'Realtime error:\n$error';
+            });
+          }
+        },
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        isRunning = true;
+
+        status =
+            'Danger Sound AI aktif.\n'
+            'Kamu boleh keluar dari aplikasi.';
+      });
+    } catch (error) {
+      await _realtimeSubscription?.cancel();
+
+      _realtimeSubscription = null;
+
+      await _realtimeService.stop();
+      await _overlayQueue;
+      await _closeBubble();
+      await _disableBackgroundMode();
+
+      if (mounted) {
+        setState(() {
+          isRunning = false;
+          status = 'Gagal mengaktifkan:\n$error';
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  // ============================================
+  // HENTIKAN DETEKSI
+  // ============================================
+
+  Future<void> stopDetection() async {
+    if (!isRunning || isLoading) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      status = 'Menghentikan Danger Sound AI...';
+    });
+
+    try {
+      await _realtimeSubscription?.cancel();
+
+      _realtimeSubscription = null;
+
+      await _realtimeService.stop();
+
+      // Selesaikan antrean sebelum menutup overlay.
+      await _overlayQueue;
+
+      await _closeBubble();
+      await _disableBackgroundMode();
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        isRunning = false;
+        currentLabel = 'background';
+        currentConfidence = 0.0;
+        currentLatency = 0.0;
+
+        _lastAlertLabel = 'background';
+
+        status = 'Danger Sound AI tidak aktif';
+      });
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          status = 'Gagal menghentikan aplikasi:\n$error';
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  // ============================================
+  // DISPOSE
+  // ============================================
+
+  @override
+  void dispose() {
+    unawaited(_realtimeSubscription?.cancel());
+
+    unawaited(_realtimeService.dispose());
+
+    super.dispose();
+  }
+
+  // ============================================
+  // TAMPILAN BERANDA
+  // ============================================
+
+  @override
+  Widget build(BuildContext context) {
+    final danger = currentLabel != '-' && currentLabel != 'background';
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Danger Sound AI'), centerTitle: true),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(24),
+          children: [
+            Center(
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF263238),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.hearing_rounded,
+                  color: Colors.white,
+                  size: 58,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            const Text(
+              'Danger Sound AI',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 6),
+
+            const Text(
+              'Deteksi suara bahaya real-time '
+              'untuk membantu pengguna Tuli',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black54),
+            ),
+
+            const SizedBox(height: 28),
+
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: isRunning
+                    ? const Color(0xFFE8F5E9)
+                    : const Color(0xFFF5F5F5),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: isRunning
+                      ? const Color(0xFF43A047)
+                      : const Color(0xFFBDBDBD),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    isRunning
+                        ? Icons.check_circle_rounded
+                        : Icons.pause_circle_outline_rounded,
+                    color: isRunning ? const Color(0xFF43A047) : Colors.grey,
+                    size: 38,
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    status,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+
+                  if (isRunning) ...[
+                    const SizedBox(height: 10),
+
+                    Text(
+                      backgroundActive && overlayActive
+                          ? 'Background + Bubble Aktif'
+                          : 'Menyiapkan layanan...',
+                      style: TextStyle(
+                        color: backgroundActive && overlayActive
+                            ? const Color(0xFF2E7D32)
+                            : Colors.orange,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+              height: 56,
+              child: ElevatedButton.icon(
+                onPressed: isLoading || isRunning ? null : startDetection,
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: const Text(
+                  'AKTIFKAN',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            SizedBox(
+              height: 52,
+              child: OutlinedButton.icon(
+                onPressed: isLoading || !isRunning ? null : stopDetection,
+                icon: const Icon(Icons.stop_rounded),
+                label: const Text('HENTIKAN'),
+              ),
+            ),
+
+            if (isLoading) ...[
+              const SizedBox(height: 20),
+              const Center(child: CircularProgressIndicator()),
+            ],
+
+            const SizedBox(height: 28),
+
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: danger
+                    ? const Color(0xFFFDECEC)
+                    : Theme.of(context).colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(20),
+                border: danger
+                    ? Border.all(color: const Color(0xFFD32F2F), width: 2)
+                    : null,
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    danger
+                        ? dangerIcon(currentLabel)
+                        : Icons.graphic_eq_rounded,
+                    size: 48,
+                    color: danger ? const Color(0xFFD32F2F) : null,
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  if (danger)
+                    const Text(
+                      'BAHAYA TERDETEKSI',
+                      style: TextStyle(
+                        color: Color(0xFFD32F2F),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                  const SizedBox(height: 6),
+
+                  Text(
+                    formatClassName(currentLabel),
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: danger ? const Color(0xFFD32F2F) : null,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    'Confidence: '
+                    '${(currentConfidence * 100).toStringAsFixed(2)}%',
+                  ),
+
+                  Text(
+                    'Inference: '
+                    '${currentLatency.toStringAsFixed(2)} ms',
+                  ),
+
+                  Text('Window: $processedWindows'),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            if (isRunning)
+              const Text(
+                'Setelah aktif, tekan Home dan gunakan HP '
+                'seperti biasa. Bubble tetap berada di atas '
+                'aplikasi lain. Jika bahaya terdeteksi, '
+                'bubble berubah sesuai jenis bahaya '
+                'dan HP bergetar.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black54, fontSize: 13),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
